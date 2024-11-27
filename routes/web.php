@@ -16,7 +16,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.show')->middleware('auth');
 Route::post('/employee/update', [DashboardController::class, 'update'])->name('employees.update');
-
+Route::post('/employee/register', [DashboardController::class, 'register'])->name('employees.register');
 
 // Ruta fija para la vista de la tabla
 

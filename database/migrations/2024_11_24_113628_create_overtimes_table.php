@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('overtimes', function (Blueprint $table) {
             $table->id(); // ID como llave primaria
-            $table->integer('FK_BOSS');
-            $table->integer('EMPLOYEE_LIST');
+            $table->string('FK_BOSS', 50);
+            $table->longText('EMPLOYEE_LIST');
             $table->date('DATE');
             $table->timestamps();
         });

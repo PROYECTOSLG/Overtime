@@ -6,6 +6,7 @@
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:700&display=swap">
+    <link rel="shortcut icon" href="/Overtime/public/images/lg.ico" />
     <style>
         .floating-error {
             animation: fadeOutUp 5s forwards;

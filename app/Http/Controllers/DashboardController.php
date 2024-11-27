@@ -4,17 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employees;
+use App\Models\Overtimes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function dashboard(Request $request)
     {
+        
         $area = Auth::user()->role;
         $employeesArea = Employees::where('AREA', $area)->get();
+        $now = new \DateTime();
+        $nextSunday = new \DateTime('next sunday');
+        $limitTime = clone $nextSunday;
+        $limitTime->modify('-36 hours');
+
+        if ($now > $limitTime) {
+            $nextSunday->modify('+1 week');
+        }
+
+        $nextSunday = $nextSunday->format('Y-m-d');
         
-        //return response()->json($employeesArea);
-        return view('dashboard', compact('employeesArea'));
+        return view('dashboard', compact('employeesArea', 'nextSunday'));
     }
 
 
@@ -47,5 +58,29 @@ class DashboardController extends Controller
             return redirect()->route('dashboard.show')->with('success', 'Empleado agregado con éxito.');
         }
     }
+
+    public function register(Request $request)
+    {
+        $area = Auth::user()->role;
+        $employeeIds = $request->input('employee_ids');
+        $date = $request->input('registration_date');
+
+        $employeesRegister = Employees::whereIn('id', $employeeIds)
+                                    ->select('NO_EMPLOYEE', 'NAME', 'AREA', 'PHONE', 'REASON', 'ROUTE', 'DINING', 'SHIFT', 'TIMETABLE', 'NOTES') 
+                                    ->get();
+
+        
+        $employeeRegistration = new Overtimes();
+        $employeeRegistration->FK_BOSS = $area; 
+        $employeeRegistration->EMPLOYEE_LIST = $employeesRegister; 
+        $employeeRegistration->DATE = $date;
+
+        $employeeRegistration->save();
+
+        return redirect()->route('dashboard.show')->with('success', 'Registro agregado con éxito.');
+    }
+
+
+
 
 }

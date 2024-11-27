@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/Overtime/public/images/lg.ico" />
+
     <style>
         .highlighted {
             background-color: #0C969C;
@@ -62,26 +64,30 @@
             
         </div>
 
-        <table class="min-w-full bg-white">
-            <thead>
-                <tr>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">No. Empleado</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white">Area</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white">Nombre de empleado</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta (transporte)</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Turno</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Horario</th>
-                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
-                </tr>
-            </thead>
-            <tbody id="ip-table-body">
-                @if(count($employeesArea) > 0)
-                    @foreach($employeesArea as $index => $employees)
+        <form method="POST" class="w-full" action="{{ route('employees.register') }}">
+            @csrf
+            <table class="min-w-full bg-white mb-10">
+                <thead>
+                    <tr>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Selección</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white">Area</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white">Nombre de empleado</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Turno</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Horario</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                    </tr>
+                </thead>
+                <tbody id="ip-table-body">
+                    @if(count($employeesArea) > 0)
+                        @foreach($employeesArea as $index => $employees)
                         <tr class="ip-row {{ str_replace(' ', '-', $employees->SHIFT) }} cursor-pointer hover:bg-blue-200 {{ $index % 2 == 0 ? 'bg-white' : 'bg-blue-100' }}" onclick='showEmployeeDetails(@json($employees))'>
-                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->NO_EMPLOYEE }}</td>
+                            <td class="py-2 text-center hidden sm:table-cell">
+                                <input type="checkbox" name="employee_ids[]" value="{{ $employees->id }}" onclick="event.stopPropagation()">
+                            </td>
                             <td class="py-2 text-center">{{ $employees->AREA }}</td>
                             <td class="py-2 text-center">{{ $employees->NAME }}</td>
                             <td class="py-2 text-center hidden sm:table-cell">{{ $employees->PHONE }}</td>
@@ -92,14 +98,23 @@
                             <td class="py-2 text-center hidden sm:table-cell">{{ $employees->TIMETABLE }}</td>
                             <td class="py-2 text-center hidden sm:table-cell">{{ $employees->NOTES }}</td>
                         </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+            <input type="date" id="registration_date" name="registration_date" value="<?php echo $nextSunday; ?>" class="p-2 rounded-lg shadow-lg mb-2">
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700">Registrar</button>
+                <label class="block text-gray-700 text-xs">*El registro se hace automaticamente para el proximo domingo, modifica según el dia deseado.</label>
+            </div>
+        </form>
+
     </div>
 
     <!-- Estilo para los botones de filtro -->
@@ -154,19 +169,22 @@
             <div id="modal-content"></div>
         </div>
     </div>
-    
-    <!-- Modifica los campos en blanco cuando STATUS es FREE -->
     <script>
-        function handleStatusChange() {
-            const statusSelect = document.getElementById('STATUS');
-            if (statusSelect.value === 'FREE') {
-                const fieldsToClear = ['INNO', 'PROJECT', 'AREA', 'PROCESS', 'TYPE'];
-                fieldsToClear.forEach(fieldId => {
-                    document.getElementById(fieldId).value = '';
-                });
-            }
-        }
-    </script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    // Obtener todos los checkboxes de empleados
+    var checkboxes = document.querySelectorAll('input[name="employee_ids[]"]');
+    // Verificar si al menos uno está seleccionado
+    var isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    
+    if (!isChecked) {
+        // Prevenir el envío del formulario
+        event.preventDefault();
+        // Mostrar una alerta
+        alert('Debes seleccionar al menos un usuario antes de enviar el formulario.');
+    }
+});
+</script>
+
     
     <!-- Generacion y accionar del modal para update de datos -->
     <script>
