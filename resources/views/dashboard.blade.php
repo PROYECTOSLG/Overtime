@@ -69,7 +69,7 @@
             <table class="min-w-full bg-white mb-10">
                 <thead>
                     <tr>
-                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Selección</th>
+                        <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Asistencia</th>
                         <th class="py-2 bg-blue-500 border border-white text-white">Area</th>
                         <th class="py-2 bg-blue-500 border border-white text-white">Nombre de empleado</th>
                         <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
@@ -108,9 +108,8 @@
             </table>
 
             <div class="text-center mt-4">
-            <input type="date" id="registration_date" name="registration_date" value="<?php echo $nextSunday; ?>" class="p-2 rounded-lg shadow-lg mb-2">
-
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700">Registrar</button>
+                <input type="date" id="registration_date" name="registration_date" value="<?php echo $nextSunday; ?>" class="p-2 rounded-lg shadow-lg mb-2">
+                <button id="submitButton" type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700">Registrar</button>
                 <label class="block text-gray-700 text-xs">*El registro se hace automaticamente para el proximo domingo, modifica según el dia deseado.</label>
             </div>
         </form>
@@ -169,129 +168,171 @@
             <div id="modal-content"></div>
         </div>
     </div>
-    <script>
-document.querySelector('form').addEventListener('submit', function(event) {
-    // Obtener todos los checkboxes de empleados
-    var checkboxes = document.querySelectorAll('input[name="employee_ids[]"]');
-    // Verificar si al menos uno está seleccionado
-    var isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-    
-    if (!isChecked) {
-        // Prevenir el envío del formulario
-        event.preventDefault();
-        // Mostrar una alerta
-        alert('Debes seleccionar al menos un usuario antes de enviar el formulario.');
-    }
-});
-</script>
 
+    <!-- Alerta para envio de REGISTRO sin selección -->
+    <script>
+        document.getElementById('submitButton').addEventListener('click', function(event) {
+            // Obtener el formulario más cercano
+            var form = event.target.closest('form');
+
+            // Obtener todos los checkboxes de empleados
+            var checkboxes = form.querySelectorAll('input[name="employee_ids[]"]');
+            // Verificar si al menos uno está seleccionado
+            var isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            
+            if (!isChecked) {
+                // Prevenir el envío del formulario
+                event.preventDefault();
+                // Mostrar una alerta
+                alert('Debes seleccionar al menos un usuario antes de enviar el formulario.');
+            }
+        });
+    </script>
     
     <!-- Generacion y accionar del modal para update de datos -->
     <script>
-        // Obtener el rol del usuario desde Laravel y pasar a JavaScript
-        const userRole = @json(Auth::user()->role);
-        
-        // Aquí definimos la constante isEditable basándonos en el rol del usuario
-        const isEditable = (userRole === 'administrador') || (userRole === 'POWER PACK') || (userRole === 'GEN 3') || 
-                            (userRole === 'NEXTEER') || (userRole === 'MFG CAMARA') || 
-                            (userRole === 'CUSTOMER QA MOTOR') || (userRole === 'PROCESS QA MOTOR') || 
-                            (userRole === 'SQA MOTOR') || (userRole === 'METROLOGIA') || 
-                            (userRole === 'ALMACEN') || (userRole === 'MANTENIMIENTO') || 
-                            (userRole === 'IT') || (userRole === 'EESH');
-        
-        function showEmployeeDetails(employee = {}) {
-            const userRole = '{{ Auth::user()->role }}'                            
-            const loggedInUserName = '{{ Auth::user()->name }}'; 
-            const isEditable = employee.hasOwnProperty('NO_EMPLOYEE'); // Manteniendo tu lógica original para determinar si es editable
+    // Obtener el rol del usuario desde Laravel y pasar a JavaScript
+    const userRole = @json(Auth::user()->role);
+    
+    // Aquí definimos la constante isEditable basándonos en el rol del usuario
+    const isEditable = (userRole === 'administrador') || (userRole === 'POWER PACK') || (userRole === 'GEN 3') || 
+                        (userRole === 'NEXTEER') || (userRole === 'MFG CAMARA') || 
+                        (userRole === 'CUSTOMER QA MOTOR') || (userRole === 'PROCESS QA MOTOR') || 
+                        (userRole === 'SQA MOTOR') || (userRole === 'METROLOGIA') || (userRole === 'ALMACEN') || 
+                        (userRole === 'MANTENIMIENTO') || (userRole === 'IT') || (userRole === 'EESH');
+    
+    function showEmployeeDetails(employee = {}) {
+        const userRole = '{{ Auth::user()->role }}';                            
+        const loggedInUserName = '{{ Auth::user()->name }}'; 
+        const isEditable = employee.hasOwnProperty('NO_EMPLOYEE'); 
 
-            document.getElementById('modal-content').innerHTML = `
-                <h2 class="text-xl font-bold mb-4">${isEditable ? `Employee Details: ${employee.NO_EMPLOYEE}` : 'Agregar Nuevo Usuario'}</h2>
-                @if ($errors->any()) <div class="bg-red-500 text-white p-4 rounded-lg mb-4"> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
-                <form id="employee-details-form" action="{{ route('employees.update') }}" method="POST">
-                    @csrf
-                    ${isEditable ? `<input type="hidden" name="employee_id" value="${employee.id}">` : ''}
-                    <div class="flex flex-wrap -mx-2">
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="NO_EMPLOYEE" class="block text-gray-700">No. Empleado</label>
-                            <input type="text" name="NO_EMPLOYEE" id="NO_EMPLOYEE" value="${employee.NO_EMPLOYEE || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="AREA" class="block text-gray-700">Area</label>
-                            <input type="text" name="AREA_display" id="AREA_display" value="${userRole || ''}" class="w-full p-2 border border-gray-300 rounded-lg" disabled>
-                            <input type="hidden" name="AREA" id="AREA" value="${userRole || ''}">
-                        </div>
+        document.getElementById('modal-content').innerHTML = `
+            <h2 class="text-xl font-bold mb-4">${isEditable ? `Employee Details: ${employee.NO_EMPLOYEE}` : 'Agregar Nuevo Usuario'}</h2>
+            @if ($errors->any()) 
+                <div class="bg-red-500 text-white p-4 rounded-lg mb-4"> 
+                    <ul> 
+                        @foreach ($errors->all() as $error) 
+                            <li>{{ $error }}</li>   
+                        @endforeach 
+                    </ul> 
+                </div> 
+            @endif
+            <form id="employee-details-form" action="{{ route('employees.update') }}" method="POST" onsubmit="return validateForm()">
+                @csrf
+                ${isEditable ? `<input type="hidden" name="employee_id" value="${employee.id}">` : ''}
+                <div class="flex flex-wrap -mx-2">
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="NO_EMPLOYEE" class="block text-gray-700">No. Empleado</label>
+                        <input type="text" name="NO_EMPLOYEE" id="NO_EMPLOYEE" value="${employee.NO_EMPLOYEE || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="AREA" class="block text-gray-700">Area</label>
+                        <input type="text" name="AREA_display" id="AREA_display" value="${userRole || ''}" class="w-full p-2 border border-gray-300 rounded-lg" disabled>
+                        <input type="hidden" name="AREA" id="AREA" value="${userRole || ''}">
+                    </div>
 
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="NAME" class="block text-gray-700">Nombre de empleado</label>
-                            <input type="text" name="NAME" id="NAME" value="${employee.NAME || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="PHONE" class="block text-gray-700">Telefono</label>
-                            <input type="text" name="PHONE" id="PHONE" value="${employee.PHONE || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="REASON" class="block text-gray-700">Motivo</label>
-                            <input type="text" name="REASON" id="REASON" value="${employee.REASON || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-1/3 px-2 mb-4">
-                            <label for="ROUTE" class="block text-gray-700">Ruta (transporte)</label>
-                            <select name="ROUTE" id="ROUTE" class="w-full p-2 border border-gray-300 rounded-lg">  
-                                <option value="">-- Selecciona una ruta --</option> 
-                                <option value="Centro" ${employee.ROUTE === 'Centro' ? 'selected' : ''}>Centro</option> 
-                                <option value="Oriente" ${employee.ROUTE === 'Oriente' ? 'selected' : ''}>Oriente</option> 
-                                <option value="Oriente 2" ${employee.ROUTE === 'Oriente 2' ? 'selected' : ''}>Oriente 2</option> 
-                                <option value="Tequisquiapan" ${employee.ROUTE === 'Tequisquiapan' ? 'selected' : ''}>Tequisquiapan</option> 
-                                <option value="Vista hermosa" ${employee.ROUTE === 'Vista hermosa' ? 'selected' : ''}>Vista hermosa</option> 
-                                <option value="Paso de mata" ${employee.ROUTE === 'Paso de mata' ? 'selected' : ''}>Paso de mata</option> 
-                            </select> 
-                        </div> 
-                        <div class="w-full sm:w-1/3 px-2 mb-4"> 
-                            <label for="DINING" class="block text-gray-700">Comedor</label> 
-                            <select name="DINING" id="DINING" class="w-full p-2 border border-gray-300 rounded-lg"> 
-                                <option value="">-- Selecciona un valor --</option> <option value="Si" ${employee.DINING === 'Si' ? 'selected' : ''}>Si</option> 
-                                <option value="No" ${employee.DINING === 'No' ? 'selected' : ''}>No</option> 
-                            </select> 
-                        </div> 
-                        <div class="w-full sm:w-1/3 px-2 mb-4"> 
-                            <label for="SHIFT" class="block text-gray-700">Turno</label> 
-                            <select name="SHIFT" id="SHIFT" class="w-full p-2 border border-gray-300 rounded-lg"> 
-                                <option value="">-- Selecciona un valor --</option> 
-                                <option value="Primero" ${employee.SHIFT === 'Primero' ? 'selected' : ''}>Primero</option> 
-                                <option value="Segundo" ${employee.SHIFT === 'Segundo' ? 'selected' : ''}>Segundo</option> 
-                                <option value="Tercero" ${employee.SHIFT === 'Tercero' ? 'selected' : ''}>Tercero</option> 
-                            </select> 
-                        </div> 
-                        <div class="w-full sm:w-1/3 px-2 mb-4"> 
-                            <label for="TIMETABLE" class="block text-gray-700">Horario</label> 
-                            <select name="TIMETABLE" id="TIMETABLE" class="w-full p-2 border border-gray-300 rounded-lg"> 
-                                <option value="">-- Selecciona un valor --</option> 
-                                <option value="7:00 - 15:00 hrs" ${employee.TIMETABLE === '7:00 - 15:00 hrs' ? 'selected' : ''}>7:00 - 15:00 hrs</option> 
-                                <option value="7:00 - 19:00 hrs" ${employee.TIMETABLE === '7:00 - 19:00 hrs' ? 'selected' : ''}>7:00 - 19:00 hrs</option> 
-                                <option value="15:00 - 23:00 hrs" ${employee.TIMETABLE === '15:00 - 23:00 hrs' ? 'selected' : ''}>15:00 - 23:00 hrs</option> 
-                                <option value="19:00 - 7:00 hrs" ${employee.TIMETABLE === '19:00 - 7:00 hrs' ? 'selected' : ''}>19:00 - 7:00 hrs</option> 
-                                <option value="23:00 - 7:00 hrs" ${employee.TIMETABLE === '23:00 - 7:00 hrs' ? 'selected' : ''}>23:00 - 7:00 hrs</option> 
-                            </select> 
-                        </div> 
-                        <div class="w-full sm:w-1/3 px-2 mb-4"> 
-                            <label for="NOTES" class="block text-gray-700">Notas</label> 
-                            <input type="text" name="NOTES" id="NOTES" value="${employee.NOTES || ''}" class="w-full p-2 border border-gray-300 rounded-lg"> 
-                        </div> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="NAME" class="block text-gray-700">Nombre de empleado</label>
+                        <input type="text" name="NAME" id="NAME" value="${employee.NAME || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
                     </div>
-                    <div class="flex justify-center"> 
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">${isEditable ? 'Modificar' : 'Agregar'}</button>
-                        <button type="button" onclick="closeModal()" class="ml-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">Cancelar</button> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="PHONE" class="block text-gray-700">Telefono</label>
+                        <input type="text" name="PHONE" id="PHONE" value="${employee.PHONE || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
                     </div>
-                </form>
-            `;
-            document.getElementById('modal').classList.remove('hidden');
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="REASON" class="block text-gray-700">Motivo</label>
+                        <input type="text" name="REASON" id="REASON" value="${employee.REASON || ''}" class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div class="w-full sm:w-1/3 px-2 mb-4">
+                        <label for="ROUTE" class="block text-gray-700">Ruta (transporte)</label>
+                        <select name="ROUTE" id="ROUTE" class="w-full p-2 border border-gray-300 rounded-lg">  
+                            <option value="">-- Selecciona una ruta --</option> 
+                            <option value="Centro" ${employee.ROUTE === 'Centro' ? 'selected' : ''}>Centro</option> 
+                            <option value="Oriente" ${employee.ROUTE === 'Oriente' ? 'selected' : ''}>Oriente</option> 
+                            <option value="Oriente 2" ${employee.ROUTE === 'Oriente 2' ? 'selected' : ''}>Oriente 2</option> 
+                            <option value="Tequisquiapan" ${employee.ROUTE === 'Tequisquiapan' ? 'selected' : ''}>Tequisquiapan</option> 
+                            <option value="Vista hermosa" ${employee.ROUTE === 'Vista hermosa' ? 'selected' : ''}>Vista hermosa</option> 
+                            <option value="Paso de mata" ${employee.ROUTE === 'Paso de mata' ? 'selected' : ''}>Paso de mata</option> 
+                        </select> 
+                    </div> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4"> 
+                        <label for="DINING" class="block text-gray-700">Comedor</label> 
+                        <select name="DINING" id="DINING" class="w-full p-2 border border-gray-300 rounded-lg"> 
+                            <option value="">-- Selecciona un valor --</option> 
+                            <option value="Si" ${employee.DINING === 'Si' ? 'selected' : ''}>Si</option> 
+                            <option value="No" ${employee.DINING === 'No' ? 'selected' : ''}>No</option> 
+                        </select> 
+                    </div> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4"> 
+                        <label for="SHIFT" class="block text-gray-700">Turno</label> 
+                        <select name="SHIFT" id="SHIFT" class="w-full p-2 border border-gray-300 rounded-lg" onchange="updateTimetableOptions()">
+                            <option value="">-- Selecciona un valor --</option>
+                            <option value="Primero" ${employee.SHIFT === 'Primero' ? 'selected' : ''}>Primero</option>
+                            <option value="Segundo" ${employee.SHIFT === 'Segundo' ? 'selected' : ''}>Segundo</option>
+                            <option value="Tercero" ${employee.SHIFT === 'Tercero' ? 'selected' : ''}>Tercero</option>
+                        </select> 
+                    </div> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4"> 
+                        <label for="TIMETABLE" class="block text-gray-700">Horario</label> 
+                        <select name="TIMETABLE" id="TIMETABLE" class="w-full p-2 border border-gray-300 rounded-lg"> 
+                            <option value="">-- Selecciona un valor --</option> 
+                        </select> 
+                    </div> 
+                    <div class="w-full sm:w-1/3 px-2 mb-4"> 
+                        <label for="NOTES" class="block text-gray-700">Notas</label> 
+                        <input type="text" name="NOTES" id="NOTES" value="${employee.NOTES || ''}" class="w-full p-2 border border-gray-300 rounded-lg"> 
+                    </div> 
+                </div>
+                <div class="flex justify-center"> 
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">${isEditable ? 'Modificar' : 'Agregar'}</button>
+                    <button type="button" onclick="closeModal()" class="ml-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">Cancelar</button> 
+                </div>
+            </form>
+        `;
+        document.getElementById('modal').classList.remove('hidden');
+        
+        // Llamar a la función para actualizar las opciones de TIMETABLE
+        updateTimetableOptions(employee.SHIFT);
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.add('hidden');
+    }
+
+    // Función para actualizar las opciones del campo TIMETABLE dependiendo de SHIFT
+    function updateTimetableOptions() {
+        const shift = document.getElementById('SHIFT').value;
+        const timetableSelect = document.getElementById('TIMETABLE');
+        let options = [];
+
+        if (!shift) {
+            options = ['-- Selecciona un valor --'];
+        } else if (shift === 'Primero') {
+            options = ['7:00 - 15:00 hrs', '7:00 - 19:00 hrs'];
+        } else if (shift === 'Segundo') {
+            options = ['15:00 - 23:00 hrs', '19:00 - 7:00 hrs'];
+        } else if (shift === 'Tercero') {
+            options = ['23:00 - 7:00 hrs'];
         }
 
+        // Limpiar las opciones actuales
+        timetableSelect.innerHTML = options.map(option => `<option value="${option}">${option}</option>`).join('');
+    }
 
+    // Validación del formulario
+    function validateForm() {
+        const requiredFields = ['NO_EMPLOYEE', 'AREA', 'NAME', 'PHONE', 'REASON', 'ROUTE', 'DINING', 'SHIFT', 'TIMETABLE'];
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
+        for (const field of requiredFields) {
+            const input = document.getElementById(field);
+            if (!input || input.value.trim() === '') {
+                alert('Todos los campos (excepto NOTAS) son requeridos.');
+                return false; // Evitar el envío del formulario
+            }
         }
-    </script>
+        return true; // Permitir el envío del formulario
+    }
+</script>
 
 
 </body>

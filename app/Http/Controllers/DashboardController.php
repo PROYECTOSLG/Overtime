@@ -80,6 +80,18 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.show')->with('success', 'Registro agregado con éxito.');
     }
 
+    public function delete($id)
+{
+    // Buscar el empleado por ID
+    $employee = Employees::findOrFail($id);
+    
+    // Eliminar el empleado
+    $employee->delete();
+    
+    // Redirigir con un mensaje de éxito
+    return redirect()->route('employees.index')->with('success', 'Empleado eliminado correctamente');
+}
+
 
 
 
