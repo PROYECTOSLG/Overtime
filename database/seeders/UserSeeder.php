@@ -10,6 +10,20 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
+            'name' => 'Victor Hugo Arroyo Jamaica',
+            'email' => 'hugo.arroyo@lginnotek.com',
+            'password' => bcrypt('lginnotek01'),
+            'role' => 'RH'
+        ]);
+
+        User::create([
+            'name' => 'Alejandra Guadalupr Lora Nieves',
+            'email' => 'alejandra.lora@lginnotek.com',
+            'password' => bcrypt('lginnotek01'),
+            'role' => 'RH'
+        ]);
+
+        User::create([
             'name' => 'Antonio Gomez Flores',
             'email' => 'antonio.gomez@lginnotek.com',
             'password' => bcrypt('lginnotek01'),

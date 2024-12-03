@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NetworkController;
+use App\Http\Controllers\PDFController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -17,8 +18,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.show')->middleware('auth');
 Route::post('/employee/update', [DashboardController::class, 'update'])->name('employees.update');
 Route::post('/employee/register', [DashboardController::class, 'register'])->name('employees.register');
-// Ruta para eliminar un empleado
-Route::delete('/employee/delete/{id}', [DashboardController::class, 'delete'])->name('employees.delete');
+
+
 
 
 // Ruta fija para la vista de la tabla

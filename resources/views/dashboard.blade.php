@@ -247,6 +247,7 @@
                         <label for="ROUTE" class="block text-gray-700">Ruta (transporte)</label>
                         <select name="ROUTE" id="ROUTE" class="w-full p-2 border border-gray-300 rounded-lg">  
                             <option value="">-- Selecciona una ruta --</option> 
+                            <option value="N/A" ${employee.ROUTE === 'N/A' ? 'selected' : ''}>N/A</option> 
                             <option value="Centro" ${employee.ROUTE === 'Centro' ? 'selected' : ''}>Centro</option> 
                             <option value="Oriente" ${employee.ROUTE === 'Oriente' ? 'selected' : ''}>Oriente</option> 
                             <option value="Oriente 2" ${employee.ROUTE === 'Oriente 2' ? 'selected' : ''}>Oriente 2</option> 
