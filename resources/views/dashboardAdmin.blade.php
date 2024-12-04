@@ -62,236 +62,262 @@
     <div class="w-full flex flex-col items-center justify-center " id="schedule">
         <div class="w-11/12 mt-10">
             <div class="flex justify-between items-center">
-                <div class="w-2/12 p-2 border border-gray-300 bg-blue-500 rounded-lg flex-col items-center text-center">
-                    <h1 class="font-bold text-white">Fecha:</h1> 
-                    <p class="text-white">{{ $availableDate }}</p>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Fecha:</h1> 
+                    <p class="text-gray-700">{{ $availableDate }}</p>
                 </div>
-                <div class="w-4/12 p-2 ml-5">
-                    <h2 class="text-2xl font-bold custom-font text-gray-700">Concentrado overtime</h2>
+                <div class="w-4/12 p-2 ml-10">
+                    <h2 class="text-4xl font-bold custom-font text-gray-700">Concentrado overtime</h2>
                 </div>
                 <div class="w-2/12 p-2 flex-col">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32">
                 </div>
             </div>
         </div>
-        <!-- PRIMER TURNO-->
-        <div class="w-11/12 mt-5" id="first">
-            <div class="flex justify-center items-center">
-                <div class="w-full p-2 border border-gray-300 bg-blue-500 rounded-lg flex items-center justify-center">
-                    <h1 class="font-bold text-white">Turno:</h1>
-                    <p class="text-white ml-2">Primero</p>
+
+        <div class="w-11/12 mt-10">
+            <div class="flex justify-between items-center">
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Comedor:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta centro:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta oriente:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta oriente 2:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta Tequisquiapan:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta Vista hermosa:</h1> 
+                    <p class="text-gray-700">N</p>
+                </div>
+                <div class="w-2/12 p-2 border border-gray-300 bg-gray-50 rounded-lg flex-col items-center text-center">
+                    <h1 class="font-bold text-gray-700">Ruta Paso de mata:</h1> 
+                    <p class="text-gray-700">N</p>
                 </div>
             </div>
-            @if(count($firstShift) > 0)
-                @php $counter = 0; @endphp <!-- Inicializar el contador -->
-                @foreach($firstShift as $employee)
-                <div class="flex flex-wrap justify-center items-stretch mt-5 border border-blue-500 {{ $counter % 2 == 0 ? 'bg-blue-200' : 'bg-blue-400' }}">
-                    <!-- Primer bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">No. Empleado</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NO_EMPLOYEE'] }}</p>
-                        </div>
+        </div>
+
+
+        <!-- PRIMER TURNO-->
+        <div class="w-11/12 mt-5" id="first">
+            @if(count($firstShift1) > 0)
+                <div class="flex-col justify-center items-center">
+                    <div class="w-full p-2 border border-gray-300 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-white">Turno:</h1>
+                        <p class="text-white ml-2">Primero</p>
                     </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Nombre</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NAME'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Teléfono</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['PHONE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Área</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['AREA'] }}</p>
-                        </div>
-                    </div>
-                    <!-- Segundo bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Horario</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['TIMETABLE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Motivo</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['REASON'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Ruta (transporte)</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['ROUTE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Comedor</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['DINING'] }}</p>
-                        </div>
+                    <div class="w-full p-2 border border-gray-300 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-gray-700">Horario:</h1>
+                        <p class="text-gray-700 ml-2">7:00 - 15:00 hrs</p>
                     </div>
                 </div>
-                @php $counter++; @endphp <!-- Incrementar el contador -->
-                @endforeach
-            @else
-                <tr>
-                    <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
-                </tr>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white">No. empleado</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white">Nombre de empleado</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ip-table-body">
+                        @foreach($firstShift1 as $index => $employee)
+                        <tr class="bg-blue-200 border-b border-white">
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @endif
 
 
+            @if(count($firstShift2) > 0)
+                <div class="flex-col justify-center items-center">
+                    <div class="w-full p-2 border border-gray-300 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-white">Turno:</h1>
+                        <p class="text-white ml-2">Primero</p>
+                    </div>
+                    <div class="w-full p-2 border border-gray-300 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-gray-700">Horario:</h1>
+                        <p class="text-gray-700 ml-2">7:00 - 19:00 hrs</p>
+                    </div>
+                </div>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white">No. empleado</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white">Nombre de empleado</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                            <th class="py-2 rounded-lg bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ip-table-body">
+                        @foreach($firstShift2 as $index => $employee)
+                        <tr class="bg-blue-200 border-b border-white">
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
 
         <!-- SEGUNDO TURNO-->
         <div class="w-11/12 mt-10" id="second">
-            <div class="flex justify-center items-center">
-                <div class="w-full p-2 border border-gray-300 bg-green-500 rounded-lg flex items-center justify-center">
-                    <h1 class="font-bold text-white">Turno:</h1>
-                    <p class="text-white ml-2">Segundo</p>
-                </div>
-            </div>
-            @if(count($secondShift) > 0)
-                @php $counter = 0; @endphp <!-- Inicializar el contador -->
-                @foreach($secondShift as $employee)
-                <div class="flex flex-wrap justify-center items-stretch mt-5 border border-green-500 {{ $counter % 2 == 0 ? 'bg-green-200' : 'bg-green-400' }}">
-                    <!-- Primer bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">No. Empleado</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NO_EMPLOYEE'] }}</p>
-                        </div>
+            @if(count($secondShift1) > 0)
+                <div class="flex-col justify-center items-center">
+                    <div class="w-full p-2 border border-gray-300 bg-green-500 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-white">Turno:</h1>
+                        <p class="text-white ml-2">Segundo</p>
                     </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Nombre</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NAME'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Teléfono</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['PHONE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Área</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['AREA'] }}</p>
-                        </div>
-                    </div>
-                    <!-- Segundo bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Horario</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['TIMETABLE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Motivo</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['REASON'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Ruta (transporte)</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['ROUTE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Comedor</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['DINING'] }}</p>
-                        </div>
+                    <div class="w-full p-2 border border-gray-300 bg-green-50 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-gray-700">Horario:</h1>
+                        <p class="text-gray-700  ml-2">15:00 - 23:00 hrs</p>
                     </div>
                 </div>
-                @php $counter++; @endphp <!-- Incrementar el contador -->
-                @endforeach
-            @else
-                <tr>
-                    <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
-                </tr>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">No. empleado</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">Nombre de empleado</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ip-table-body">
+                        @foreach($secondShift1 as $index => $employee)
+                        <tr class="bg-green-200 border-b border-white">
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @endif
 
+
+            @if(count($secondShift2) > 0)
+                <div class="flex-col justify-center items-center">
+                    <div class="w-full p-2 border border-gray-300 bg-green-500 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-white">Turno:</h1>
+                        <p class="text-white ml-2">Segundo</p>
+                    </div>
+                    <div class="w-full p-2 border border-gray-300 bg-green-50 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-gray-700">Horario:</h1>
+                        <p class="text-gray-700  ml-2">19:00 - 7:00 hrs</p>
+                    </div>
+                </div>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">No. empleado</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">Nombre de empleado</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ip-table-body">
+                        @foreach($secondShift2 as $index => $employee)
+                        <tr class="bg-green-200 border-b border-white">
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
 
         </div>
 
         <!-- TERCER TURNO-->
-        <div class="w-11/12 mt-5" id="third">
-            <div class="flex justify-center items-center">
+        <div class="w-11/12 mt-10 mb-10" id="third">
+            <div class="flex-col justify-center items-center">
                 <div class="w-full p-2 border border-gray-300 bg-yellow-500 rounded-lg flex items-center justify-center">
                     <h1 class="font-bold text-white">Turno:</h1>
                     <p class="text-white ml-2">Tercero</p>
                 </div>
-            </div>
-            @if(count($thirdShift) > 0)
-                @php $counter = 0; @endphp <!-- Inicializar el contador -->
-                @foreach($thirdShift as $employee)
-                <div class="flex flex-wrap justify-center items-stretch mt-5 border border-yellow-500 {{ $counter % 2 == 0 ? 'bg-yellow-200' : 'bg-yellow-400' }}">
-                    <!-- Primer bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">No. Empleado</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NO_EMPLOYEE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Nombre</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['NAME'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Teléfono</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['PHONE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Área</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['AREA'] }}</p>
-                        </div>
-                    </div>
-                    <!-- Segundo bloque -->
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Horario</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['TIMETABLE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Motivo</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['REASON'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Ruta (transporte)</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['ROUTE'] }}</p>
-                        </div>
-                    </div>
-                    <div class="w-3/12 p-2 border border-gray-300 rounded-lg flex flex-col items-center text-center flex-grow">
-                        <h1 class="font-bold text-gray-700">Comedor</h1>
-                        <div class="w-full bg-white rounded-lg">
-                            <p class="text-gray-700">{{ $employee['DINING'] }}</p>
-                        </div>
-                    </div>
+                <div class="w-full p-2 border border-gray-300 bg-yellow-50 rounded-lg flex items-center justify-center">
+                    <h1 class="font-bold text-gray-700">Horario:</h1>
+                    <p class="text-gray-700  ml-2">23:00 - 7:00 hrs</p>
                 </div>
-                @php $counter++; @endphp <!-- Incrementar el contador -->
-                @endforeach
-            @else
-                <tr>
-                    <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
-                </tr>
-            @endif
+            </div>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white">No. empleado</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white">Nombre de empleado</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                    </tr>
+                </thead>
+                <tbody id="ip-table-body">
+                    @if(count($thirdShift) > 0)
+                        @foreach($thirdShift as $index => $employee)
+                        <tr class="bg-yellow-200 border-b border-white">
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="9" class="py-2 text-center rounded-lg border border-gray-200">No hay registros para este horario.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
     

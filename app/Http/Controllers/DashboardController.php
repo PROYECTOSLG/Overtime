@@ -25,21 +25,41 @@ class DashboardController extends Controller
             $date = $request->input('date', $nearestDate);
     
             // Consultas para cada turno
-            $firstShift = Overtimes::where('DATE', $date)
+            $firstShift1 = Overtimes::where('DATE', $date)
                 ->get()
                 ->flatMap(function ($overtime) {
                     return collect(json_decode($overtime->EMPLOYEE_LIST, true))
-                        ->where('SHIFT', 'Primero');
+                        ->where('SHIFT', 'Primero')
+                        ->where('TIMETABLE', '7:00 - 15:00 hrs');
                 })
-                ->sortBy(['TIMETABLE', 'AREA']);
+                ->sortBy(['AREA']);
+
+            $firstShift2 = Overtimes::where('DATE', $date)
+                ->get()
+                ->flatMap(function ($overtime) {
+                    return collect(json_decode($overtime->EMPLOYEE_LIST, true))
+                        ->where('SHIFT', 'Primero')
+                        ->where('TIMETABLE', '7:00 - 19:00 hrs');
+                })
+                ->sortBy(['AREA']);
     
-            $secondShift = Overtimes::where('DATE', $date)
+            $secondShift1 = Overtimes::where('DATE', $date)
                 ->get()
                 ->flatMap(function ($overtime) {
                     return collect(json_decode($overtime->EMPLOYEE_LIST, true))
-                        ->where('SHIFT', 'Segundo');
+                        ->where('SHIFT', 'Segundo')
+                        ->where('TIMETABLE', '15:00 - 23:00 hrs');
                 })
-                ->sortBy(['TIMETABLE', 'AREA']);
+                ->sortBy(['AREA']);
+            
+            $secondShift2 = Overtimes::where('DATE', $date)
+                ->get()
+                ->flatMap(function ($overtime) {
+                    return collect(json_decode($overtime->EMPLOYEE_LIST, true))
+                        ->where('SHIFT', 'Segundo')
+                        ->where('TIMETABLE', '19:00 - 7:00 hrs');
+                })
+                ->sortBy(['AREA']);
     
             $thirdShift = Overtimes::where('DATE', $date)
                 ->get()
@@ -47,7 +67,8 @@ class DashboardController extends Controller
                     return collect(json_decode($overtime->EMPLOYEE_LIST, true))
                         ->where('SHIFT', 'Tercero');
                 })
-                ->sortBy(['TIMETABLE', 'AREA']);
+                ->sortBy(['AREA']);
+            
             
             // Obtener todas las fechas disponibles para el selector de fechas
             $dates = Overtimes::orderBy('DATE')
@@ -55,7 +76,7 @@ class DashboardController extends Controller
             ->pluck('DATE');
         
     
-            return view('dashboardAdmin', compact('firstShift', 'secondShift', 'thirdShift', 'dates', 'date'));
+            return view('dashboardAdmin', compact('firstShift1','firstShift2', 'secondShift1', 'secondShift2', 'thirdShift', 'dates', 'date'));
 
 
         } else {
