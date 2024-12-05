@@ -9,6 +9,12 @@ export default {
         './resources/**/*.js',
         './resources/**/*.vue',
     ],
+    safelist: [
+        'peer-checked:bg-blue-600',
+        'peer-checked:translate-x-full',
+        'peer-focus:ring-blue-300',
+        'peer-focus:ring-blue-800'
+      ],
     theme: {
         extend: {
             fontFamily: {
