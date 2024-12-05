@@ -119,8 +119,6 @@ class DashboardController extends Controller
         }
     }
     
-
-
     public function update(Request $request)
     {
         $validatedData = $request->validate([
@@ -131,8 +129,6 @@ class DashboardController extends Controller
             'REASON' => 'required|string',
             'ROUTE' => 'required|string',
             'DINING' => 'required|string',
-            'SHIFT' => 'required|string',
-            'TIMETABLE' => 'required|string',
             'NOTES' => 'nullable|string',
         ]);
 
@@ -152,39 +148,64 @@ class DashboardController extends Controller
     }
 
     public function register(Request $request)
-{
-    $area = Auth::user()->role;
-    $employeeIds = $request->input('employee_ids');
-    $date = $request->input('registration_date');
+    {
+        $area = Auth::user()->role;
+        $employeeIds = $request->input('employee_ids');
+        $date = $request->input('registration_date');
 
-    // Obtener los empleados seleccionados
-    $employeesRegister = Employees::whereIn('id', $employeeIds)
-                                  ->select('NO_EMPLOYEE', 'NAME', 'AREA', 'PHONE', 'REASON', 'ROUTE', 'DINING', 'SHIFT', 'TIMETABLE', 'NOTES')
-                                  ->get();
+        foreach ($employeeIds as $employeeId) {
+            $shift = $request->input("SHIFT_$employeeId");
+            $timetable = $request->input("TIMETABLE_$employeeId");
 
-    // Buscar si ya existe un registro con el mismo área y fecha
-    $existingRecord = Overtimes::where('FK_BOSS', $area)->where('DATE', $date)->first();
+            // Validar que los valores de SHIFT y TIMETABLE no sean nulos
+            if ($shift && $timetable) {
+                Employees::where('id', $employeeId)
+                    ->update([
+                        'SHIFT' => $shift,
+                        'TIMETABLE' => $timetable,
+                    ]);
+            } else {
+                return redirect()->back()->with('error', 'Todos los empleados seleccionados deben tener un valor en "Turno" y "Horario" válido.');
+            }
+        }
 
-    if ($existingRecord) {
-        // Si existe, decodificar EMPLOYEE_LIST existente y agregar los nuevos empleados
-        $existingEmployees = json_decode($existingRecord->EMPLOYEE_LIST, true);
-        $newEmployees = $employeesRegister->toArray();
-        $combinedEmployees = array_merge($existingEmployees, $newEmployees);
 
-        // Actualizar el registro existente
-        $existingRecord->EMPLOYEE_LIST = json_encode($combinedEmployees);
-        $existingRecord->save();
-    } else {
-        // Si no existe, crear un nuevo registro
-        $employeeRegistration = new Overtimes();
-        $employeeRegistration->FK_BOSS = $area;
-        $employeeRegistration->EMPLOYEE_LIST = json_encode($employeesRegister->toArray());
-        $employeeRegistration->DATE = $date;
-        $employeeRegistration->save();
+        // Obtener los empleados seleccionados
+        $employeesRegister = Employees::whereIn('id', $employeeIds)
+                                    ->select('NO_EMPLOYEE', 'NAME', 'AREA', 'PHONE', 'REASON', 'ROUTE', 'DINING', 'SHIFT', 'TIMETABLE', 'NOTES')
+                                    ->get();
+
+        // Buscar si ya existe un registro con el mismo área y fecha
+        $existingRecord = Overtimes::where('FK_BOSS', $area)->where('DATE', $date)->first();
+
+        if ($existingRecord) {
+            // Si existe, decodificar EMPLOYEE_LIST existente y agregar los nuevos empleados
+            $existingEmployees = json_decode($existingRecord->EMPLOYEE_LIST, true);
+            $newEmployees = $employeesRegister->toArray();
+            $combinedEmployees = array_merge($existingEmployees, $newEmployees);
+
+            // Actualizar el registro existente
+            $existingRecord->EMPLOYEE_LIST = json_encode($combinedEmployees);
+            $existingRecord->save();
+        } else {
+            // Si no existe, crear un nuevo registro
+            $employeeRegistration = new Overtimes();
+            $employeeRegistration->FK_BOSS = $area;
+            $employeeRegistration->EMPLOYEE_LIST = json_encode($employeesRegister->toArray());
+            $employeeRegistration->DATE = $date;
+            $employeeRegistration->save();
+        }
+
+        return redirect()->route('dashboard.show')->with('success', 'Registro agregado con éxito.');
     }
 
-    return redirect()->route('dashboard.show')->with('success', 'Registro agregado con éxito.');
-}
+    public function destroy($id)
+    {
+        $employee = Employees::findOrFail($id);
+        $employee->delete();
+
+        return redirect()->back()->with('success', 'Empleado eliminado correctamente.');
+    }
 
 
 }
