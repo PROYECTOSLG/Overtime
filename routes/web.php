@@ -16,7 +16,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.show')->middleware('auth');
 Route::post('/employee/update', [DashboardController::class, 'update'])->name('employees.update');
 Route::post('/employee/register', [DashboardController::class, 'register'])->name('employees.register');
-Route::post('/employees/{id}/delete', [DashboardController::class, 'destroy'])->name('employees.destroy');
+Route::post('/employees/{id}', [DashboardController::class, 'destroy'])->name('employees.destroy');
+
+Route::get('/employees/overtimes', [DashboardController::class, 'overtimes'])->name('employees.overtimes');
+
 
 
 

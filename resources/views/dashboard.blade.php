@@ -22,6 +22,40 @@
         .custom-select {
             width: 100px; /* Ancho específico cuando está cerrado */
         }
+
+        .alert {
+            position: fixed;
+            top: 80px;
+            left: 10px;
+            width: 300px; /* Ajustar el ancho */
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert.hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100">
@@ -41,6 +75,21 @@
     <!-- ESPACIO DEL CUERPO DE LA PAGINA-->
     <div class="container mx-auto p-8">
         <h1 class="text-2xl font-bold flex items-center justify-center mb-4"></h1>
+
+        @if(session('success'))
+        <div class="alert success">
+            <span class="font-medium">¡Éxito!</span> {{ session('success') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div class="alert error">
+            <span class="font-medium">¡Oh oh! Algo sucedió.</span>
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+        @endif
 
         <div class="flex justify-center mb-4 space-x-2">
             <button type="button" onclick="showEmployeeDetails({})" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"><img src="{{ asset('images/addUser.png') }}" alt="Add user"></button>
@@ -67,71 +116,127 @@
         </div>
 
         <form method="POST" class="w-full" action="{{ route('employees.register') }}">
-            @csrf
-            <div class="overflow-x-auto w-full">
-                <table class="min-w-full bg-white mb-10">
-                    <thead>
-                        <tr>
-                            <th class="py-2 bg-blue-500 border border-white text-white">Asistencia</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white">Nombre del empleado</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white">Turno</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white">Horario</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
-                            <th class="py-2 bg-blue-500 border border-white text-white">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ip-table-body">
-                        @if(count($employeesArea) > 0)
-                            @foreach($employeesArea as $index => $employees)
-                                <tr class="ip-row {{ str_replace(' ', '-', $employees->SHIFT) }} cursor-pointer hover:bg-blue-200 {{ $index % 2 == 0 ? 'bg-white' : 'bg-blue-100' }}" onclick='showEmployeeDetails(@json($employees))'>
-                                    <td class="py-2 text-center">
-                                        <input type="checkbox" name="employee_ids[]" value="{{ $employees->id }}" onclick="event.stopPropagation()" data-index="{{ $index }}" class="w-4 h-4 cursor-pointer">
-                                    </td>
-                                    <td class="py-2 text-center">{{ $employees->NAME }}</td>
-                                    <td class="py-2 text-center hidden sm:table-cell">{{ $employees->PHONE }}</td>
-                                    <td class="py-2 text-center hidden sm:table-cell">{{ $employees->REASON }}</td>
-                                    <td class="py-2 text-center hidden sm:table-cell">{{ $employees->ROUTE }}</td>
-                                    <td class="py-2 text-center hidden sm:table-cell">{{ $employees->DINING }}</td>
-                                    <td class="py-2 text-center">
-                                        <select name="SHIFT_{{ $employees->id }}" class="custom-select w-full p-2 border border-gray-300 rounded-lg" onclick="event.stopPropagation()" onchange="updateTimetableOptions(this)">
-                                            <option value="">-- Selecciona un valor --</option>
-                                            <option value="Primero">Primero</option>
-                                            <option value="Segundo">Segundo</option>
-                                            <option value="Tercero">Tercero</option>
-                                        </select>
-                                    </td>
-                                    <td class="py-2 text-center">
-                                        <select name="TIMETABLE_{{ $employees->id }}" class="custom-select w-full p-2 border border-gray-300 rounded-lg" onclick="event.stopPropagation()">
-                                            <option value="">-- Selecciona un valor --</option>
-                                        </select>
-                                    </td>
-                                    <td class="py-2 text-center hidden sm:table-cell">{{ $employees->NOTES }}</td>
-                                    <td class="py-2 text-center">
+    @csrf
+    <div class="overflow-x-auto w-full">
+        <table class="min-w-full bg-white mb-10">
+            <thead>
+                <tr>
+                    <th class="py-2 bg-blue-500 border border-white text-white">Asistencia</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white">Nombre del empleado</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white">Turno</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white">Horario</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                    <th class="py-2 bg-blue-500 border border-white text-white">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="ip-table-body">
+                @if($employeesArea && count($employeesArea) > 0)
+                    @foreach($employeesArea as $index => $employees)
+                        <tr class="ip-row {{ str_replace(' ', '-', $employees->SHIFT) }} cursor-pointer hover:bg-blue-200 {{ $index % 2 == 0 ? 'bg-white' : 'bg-blue-100' }}" onclick='showEmployeeDetails(@json($employees))'>
+                            <td class="py-2 text-center">
+                                <input type="checkbox" name="employee_ids[]" value="{{ $employees->id }}" onclick="event.stopPropagation()" data-index="{{ $index }}" class="w-4 h-4 cursor-pointer">
+                            </td>
+                            <td class="py-2 text-center">{{ $employees->NAME }}</td>
+                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->PHONE }}</td>
+                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->REASON }}</td>
+                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->ROUTE }}</td>
+                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->DINING }}</td>
+                            <td class="py-2 text-center">
+                                <select name="SHIFT_{{ $employees->id }}" class="custom-select w-full p-2 border border-gray-300 rounded-lg" onclick="event.stopPropagation()" onchange="updateTimetableOptions(this)">
+                                    <option value="">-- Selecciona un valor --</option>
+                                    <option value="Primero">Primero</option>
+                                    <option value="Segundo">Segundo</option>
+                                    <option value="Tercero">Tercero</option>
+                                </select>
+                            </td>
+                            <td class="py-2 text-center">
+                                <select name="TIMETABLE_{{ $employees->id }}" class="custom-select w-full p-2 border border-gray-300 rounded-lg" onclick="event.stopPropagation()">
+                                    <option value="">-- Selecciona un valor --</option>
+                                </select>
+                            </td>
+                            <td class="py-2 text-center hidden sm:table-cell">{{ $employees->NOTES }}</td>
+                            <td class="w-2/12 py-2 text-center">
+                                <div>
+                                    @if($employeeCount > 1)
+                                        <!-- Botón "Eliminar" movido a su propio formulario -->
                                         <form action="{{ route('employees.destroy', $employees->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
                                             @csrf
-                                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-lg shadow hover:bg-red-700" onclick="event.stopPropagation()"><img src="{{ asset('images/delete.png') }}" alt="Add user"></button>
+                                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-lg shadow hover:bg-red-700" onclick="event.stopPropagation()">
+                                                <img src="{{ asset('images/delete.png') }}" alt="delete user">
+                                            </button>
                                         </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center mt-4">
-                <input type="date" id="registration_date" name="registration_date" value="<?php echo $nextSunday; ?>" class="p-2 rounded-lg shadow-lg mb-2">
-                <button id="submitButton" type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700">Registrar</button>
-                <label class="block text-gray-700 text-xs">*El registro se hace automaticamente para el proximo domingo, modifica según el dia deseado.</label>
-            </div>
-        </form>
+                                    @else
+                                        <span class="text-red-500">Debes por lo menos contar con un registro de un usuario activo, solicita apoyo del equipo de IT.</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="9" class="py-2 text-center">No hay registros disponibles.</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center mt-4">
+        <div class="flex items-center justify-center space-x-4">
+            <input type="date" id="registration_date" name="registration_date" value="{{ $nextSunday }}" class="p-2 rounded-lg shadow-lg mb-2" min="{{ $nextSunday }}">
+            <button id="submitButton" type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 mb-2">Registrar</button>
+        </div>
+        <label class="block text-gray-700 text-xs mt-2">*El registro se hace automáticamente para el próximo domingo, modifica según el día deseado.</label>
+        <div class="mt-2 text-green-700 text-xs">
+            Tiempo restante para el límite: <span id="countdown"></span>
+        </div>
+    </div>
+</form>
+
+<!-- Formulario independiente para "Registrar horas extras" -->
+<div id="overtime-form-wrapper" class="text-center mt-4">
+    <form action="{{ route('employees.overtimes') }}" method="GET">
+        @csrf
+        <button type="submit" class="bg-yellow-500 text-white px-2 py-1 rounded-lg shadow hover:bg-yellow-700">
+            <img src="{{ asset('images/list.png') }}" alt="Add user">
+        </button>
+    </form>
+</div>
+
+<script>
+    // Script para mover el formulario de "Registrar horas extras" junto al botón "Registrar"
+    document.addEventListener('DOMContentLoaded', function() {
+        const mainForm = document.querySelector('form[action="{{ route('employees.register') }}"]');
+        const overtimeFormWrapper = document.getElementById('overtime-form-wrapper');
+        const targetDiv = mainForm.querySelector('.flex.items-center.justify-center.space-x-4');
+
+        if (mainForm && overtimeFormWrapper && targetDiv) {
+            targetDiv.appendChild(overtimeFormWrapper.firstElementChild);
+        }
+
+        // Contador de tiempo
+        const limitTime = new Date("{{ $limitTimeFormatted }}").getTime();
+        const countdownInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = limitTime - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = "Tiempo límite alcanzado";
+            }
+        }, 1000);
+    });
+</script>
 
     </div>
 
@@ -229,7 +334,7 @@
 
             if (!valid) {
                 event.preventDefault();
-                alert('Todos los empleados seleccionados deben tener un valor en "SHIFT" y "TIMETABLE".');
+                alert('Todos los empleados seleccionados deben tener un Turno y Horario.');
             }
         });
 
@@ -254,7 +359,27 @@
         }
     </script>
 
+    <!-- Movimiento de alerta -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Mostrar la alerta
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.classList.add('show');
 
+                // Ocultar la alerta después de 5 segundos
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                    alert.classList.add('hide');
+
+                    // Remover la alerta del DOM después de la transición
+                    alert.addEventListener('transitionend', () => {
+                        alert.remove();
+                    });
+                }, 5000);
+            }
+        });
+    </script>
 
     <!-- Generacion y accionar del modal para update de datos -->
     <script>
