@@ -349,9 +349,9 @@
             } else if (shift === 'Primero') {
                 options = ['7:00 - 15:00 hrs', '7:00 - 19:00 hrs'];
             } else if (shift === 'Segundo') {
-                options = ['15:00 - 23:00 hrs', '19:00 - 7:00 hrs'];
+                options = ['15:00 - 23:00 hrs'];
             } else if (shift === 'Tercero') {
-                options = ['23:00 - 7:00 hrs'];
+                options = ['19:00 - 7:00 hrs', '23:00 - 7:00 hrs'];
             }
 
             // Limpiar las opciones actuales

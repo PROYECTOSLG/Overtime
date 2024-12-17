@@ -153,14 +153,14 @@
                         <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift1RouteCounts['Paso de mata'] }}</td>
                     </tr>
                     <tr class="text-center">
-                        <td class="py-2 px-4 border bg-green-300 border-white">Segundo 19:00 - 7:00 hrs</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2DiningCount }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Oriente'] }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Oriente 2'] }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Centro'] }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Tequisquiapan'] }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Vista hermosa'] }}</td>
-                        <td class="py-2 px-4 border bg-green-300 border-white">{{ $secondShift2RouteCounts['Paso de mata'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">Tercero 19:00 - 7:00 hrs</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2DiningCount }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Oriente'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Oriente 2'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Centro'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Tequisquiapan'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Vista hermosa'] }}</td>
+                        <td class="py-2 px-4 border bg-yellow-300 border-white">{{ $thirdShift2RouteCounts['Paso de mata'] }}</td>
                     </tr>
                     <tr class="text-center">
                         <td class="py-2 px-4 border bg-yellow-300 border-white">Tercero 23:00 - 7:00 hrs</td>
@@ -299,55 +299,52 @@
             @endif
 
 
-            @if(count($secondShift2) > 0)
-                <div class="flex-col justify-center items-center">
-                    <div class="w-full p-2 border border-gray-300 bg-green-500 rounded-lg flex items-center justify-center">
-                        <h1 class="font-bold text-white">Turno:</h1>
-                        <p class="text-white ml-2">Segundo</p>
-                    </div>
-                    <div class="w-full p-2 border border-gray-300 bg-green-50 rounded-lg flex items-center justify-center">
-                        <h1 class="font-bold text-gray-700">Horario:</h1>
-                        <p class="text-gray-700  ml-2">19:00 - 7:00 hrs</p>
-                    </div>
-                </div>
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">No. empleado</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white">Nombre de empleado</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Telefono</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Motivo</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Ruta</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Comedor</th>
-                            <th class="py-2 rounded-lg bg-green-500 border border-white text-white hidden sm:table-cell">Notas</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ip-table-body">
-                        @foreach($secondShift2 as $index => $employee)
-                        <tr class="bg-green-200 border-b border-white">
-                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
-                            <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-
         </div>
 
         <!-- TERCER TURNO-->
         <div class="w-11/12 mt-10 mb-10" id="third">
-        @if(count($thirdShift) > 0)
+        @if(count($thirdShift2) > 0)
                 <div class="flex-col justify-center items-center">
                     <div class="w-full p-2 border border-gray-300 bg-yellow-500 rounded-lg flex items-center justify-center">
                         <h1 class="font-bold text-white">Turno:</h1>
                         <p class="text-white ml-2">Tercero</p>
                     </div>
+                    <div class="w-full p-2 border border-gray-300 bg-yellow-50 rounded-lg flex items-center justify-center">
+                        <h1 class="font-bold text-gray-700">Horario:</h1>
+                        <p class="text-gray-700  ml-2">19:00 - 7:00 hrs</p>
+                    </div>
+                </div>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white">No. empleado</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white">Nombre de empleado</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Telefono</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Motivo</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Ruta</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Comedor</th>
+                        <th class="py-2 rounded-lg bg-yellow-500 border border-white text-white hidden sm:table-cell">Notas</th>
+                    </tr>
+                </thead>
+                <tbody id="ip-table-body">
+                    @foreach($thirdShift2 as $index => $employee)
+                    <tr class="bg-yellow-200 border-b border-white">
+                        <td class="py-2 text-center border-r rounded-lg">{{ $employee['NO_EMPLOYEE'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg">{{ $employee['NAME'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['PHONE'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['REASON'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['ROUTE'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['DINING'] }}</td>
+                        <td class="py-2 text-center border-r rounded-lg hidden sm:table-cell">{{ $employee['NOTES'] }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif    
+
+
+        @if(count($thirdShift) > 0)
+                <div class="flex-col justify-center items-center">
                     <div class="w-full p-2 border border-gray-300 bg-yellow-50 rounded-lg flex items-center justify-center">
                         <h1 class="font-bold text-gray-700">Horario:</h1>
                         <p class="text-gray-700  ml-2">23:00 - 7:00 hrs</p>

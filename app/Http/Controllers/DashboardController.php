@@ -83,8 +83,8 @@ class DashboardController extends Controller
             $secondShift1 = getOvertimeEmployees($date, 'Segundo', '15:00 - 23:00 hrs');
             list($secondShift1DiningCount, $secondShift1RouteCounts) = processShiftData($secondShift1, $diningCountGlobal, $routeCountsGlobal);
     
-            $secondShift2 = getOvertimeEmployees($date, 'Segundo', '19:00 - 7:00 hrs');
-            list($secondShift2DiningCount, $secondShift2RouteCounts) = processShiftData($secondShift2, $diningCountGlobal, $routeCountsGlobal);
+            $thirdShift2 = getOvertimeEmployees($date, 'Tercero', '19:00 - 7:00 hrs');
+            list($thirdShift2DiningCount, $thirdShift2RouteCounts) = processShiftData($thirdShift2, $diningCountGlobal, $routeCountsGlobal);
     
             $thirdShift = getOvertimeEmployees($date, 'Tercero');
             list($thirdShiftDiningCount, $thirdShiftRouteCounts) = processShiftData($thirdShift, $diningCountGlobal, $routeCountsGlobal);
@@ -95,12 +95,12 @@ class DashboardController extends Controller
                 ->pluck('DATE');
     
             return view('dashboardAdmin', compact(
-                'firstShift1', 'firstShift2', 'secondShift1', 'secondShift2', 'thirdShift', 
+                'firstShift1', 'firstShift2', 'secondShift1', 'thirdShift2', 'thirdShift', 
                 'dates', 'date', 'diningCountGlobal', 'routeCountsGlobal', 
                 'firstShift1DiningCount', 'firstShift1RouteCounts', 
                 'firstShift2DiningCount', 'firstShift2RouteCounts', 
                 'secondShift1DiningCount', 'secondShift1RouteCounts', 
-                'secondShift2DiningCount', 'secondShift2RouteCounts', 
+                'thirdShift2DiningCount', 'thirdShift2RouteCounts', 
                 'thirdShiftDiningCount', 'thirdShiftRouteCounts'
             ));
         } else {
@@ -177,14 +177,14 @@ class DashboardController extends Controller
         $employeeIds = $request->input('employee_ids');
         $date = $request->input('registration_date');
 
-        // Definir el límite de tiempo (Jueves a las 7:08 PM)
+        // Definir el límite de tiempo (Viernes 3 PM)
         $limitTime = new \DateTime('friday 15:00', new \DateTimeZone('America/Mexico_City'));
         $now = new \DateTime('now', new \DateTimeZone('America/Mexico_City'));
 
         // Validar que el registro se haga antes del límite
         if ($now > $limitTime) {
             // Si el registro es después del límite, retornar con un error
-            return redirect()->back()->withErrors(['error' => 'La fecha limite de registro fue a las 3:00pm, intenta con otra fecha disponible.']);
+            return redirect()->back()->withErrors(['error' => 'La fecha limite de registro fue a las 3:00pm, intenta más tarde.']);
         }
 
         foreach ($employeeIds as $employeeId) {
