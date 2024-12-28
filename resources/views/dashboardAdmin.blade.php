@@ -342,7 +342,7 @@
             </table>
         @endif    
 
-
+        <!-- TERCER TURNO 2-->
         @if(count($thirdShift) > 0)
                 <div class="flex-col justify-center items-center">
                     <div class="w-full p-2 border border-gray-300 bg-yellow-50 rounded-lg flex items-center justify-center">
